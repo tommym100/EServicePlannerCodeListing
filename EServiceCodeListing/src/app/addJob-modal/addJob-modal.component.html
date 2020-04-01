@@ -1,0 +1,89 @@
+<ngx-smart-modal #addJobModal [identifier]="'addJobModal'" (onClose)="onClose()" (onOpen)="onOpen()"
+  [dismissable]="false">
+  <div style="margin-top: 20px">
+    <div class="addJobContainer">
+      <div class="">
+        <p class="jobTitle">Add Job</p>
+      </div>
+      <select (change)="changeType()" class="selectType" [(ngModel)]="jobType">
+        <option *ngFor="let type of jobTypes" [value]="type">{{type}}</option>
+      </select>
+
+      <div *ngIf="jobType != 'Select job type'">
+         <p class="errorClass">{{addErrMsg}}</p>
+        <table class="addJobTable">
+          <tr>
+            <td>Start Date:</td>
+            <td>
+              <div class="datePickerAddJob"> 
+                <ejs-datepicker id='datepickerStart' placeholder='Select a start date' format='dd-MM-yyyy' [min]='minDate' [(value)]='startDate' (renderDayCell)='onRenderCell($event)' (change)="changeStartDate($event)"></ejs-datepicker> 
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <tr *ngIf="jobType == 'Delivery'">
+            <td>End Date:</td>
+            <td>
+              <div class="datePickerAddJob"> 
+                <ejs-datepicker id='datepickerEnd' placeholder='Select an end date' format='dd-MM-yyyy' [min]='startDate' [(value)]='endDate' (renderDayCell)='onRenderCell($event)' (change)="changeEndDate($event)"></ejs-datepicker> 
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Customer Name:</td>
+            <td><input [(ngModel)]="custName" placeholder="Customer Name"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>House Number:</td>
+            <td><input (click)="$event.target.select()" [(ngModel)]="houseNum" type="number" min="0" placeholder="House number"></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Postcode:</td>
+            <td><input [(ngModel)]="postCode" type="text" placeholder="Postcode"></td>
+            <td><button (click)="findAddress()">Find Address</button></td>
+          </tr>
+          <tr>
+            <td *ngIf="custAddStr">Address:</td>
+            <td><span>{{custAddStr}}</span></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Route:</td>
+            <td>
+              <select class="selectUnitType" [(ngModel)]="selectedRoute">
+                <option *ngFor="let route of routes" [value]="route">{{route}}</option>
+              </select>
+            </td>
+            <td></td>
+          </tr>
+          <tr *ngFor="let unit of units; index as i">
+            <td>Unit Type</td>
+            <td>{{ unit.name }}</td>
+            <td>{{ unit.qtdy | number }}&nbsp;<button class="deleteButton" (click)="removeUnit(i)"><i
+                  class="fa fa-trash"></i></button></td>
+          </tr>
+          <tr>
+            <td>Unit Type:</td>
+            <td>
+              <select class="selectUnitType" [(ngModel)]="unitType">
+                <option *ngFor="let type of unitTypes" [value]="type">{{type}}</option>
+              </select>
+            </td>
+            <td><input (click)="$event.target.select()" [(ngModel)]="unitQtdy" class="qtdyInput" type="number" min="0" placeholder="Qtdy"><button
+                (click)="addUnit()">Add</button></td>
+          </tr>
+        </table>
+        <div>
+          <div class="addJobContainer">
+              <input [(ngModel)]="note" class="notesBoxAddJob" placeholder="Add a note for the job">
+          </div>
+        </div>
+        <button class="saveBtn" (click)="onSave()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  <app-loading></app-loading>
+</ngx-smart-modal>

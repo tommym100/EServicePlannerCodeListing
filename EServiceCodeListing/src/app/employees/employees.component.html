@@ -1,0 +1,28 @@
+
+<app-addNewEmp-modal></app-addNewEmp-modal>
+<app-editEmp-modal></app-editEmp-modal>
+
+<table class="employeeTable">
+    <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Mobile #</th>
+        <th>User Type</th>
+        <th>Email</th>
+        <th *ngIf="isAdmin">Password</th>
+        <th *ngIf="isAdmin"></th>
+    </tr>
+    <tr *ngFor="let employee of empObj">
+        <td>{{employee.firstName}}</td>
+        <td>{{employee.lastName}}</td>
+        <td>{{employee.mobileNum}}</td>
+        <td>{{employee.userType}}</td>
+        <td>{{employee.emailAddy}}</td>
+        <td *ngIf="isAdmin">********</td>
+        <td *ngIf="isAdmin" (click)="openEmpEdit(employee)"><i class="fa fa-edit"></i></td>
+    </tr>
+</table>
+<div *ngIf="isAdmin" class="addNewEmpBtn">
+    <button (click)="showAddNewEmp()">Add Employee</button>
+</div>
+<app-loading></app-loading>

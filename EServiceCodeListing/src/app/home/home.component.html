@@ -1,0 +1,291 @@
+<app-jobdetails-modal></app-jobdetails-modal>
+<app-editJob-modal></app-editJob-modal>
+<app-employee-modal></app-employee-modal>
+<app-notes-modal></app-notes-modal>
+<app-date-modal></app-date-modal>
+<div class="padding">
+  <!-- Display the options and selected views of weekly or daily -->
+  <div class="currentWeek">
+    <div class="toggleView">
+      <button (click)="showDaily()" [className]="dateSelected.dailySelected ? 'viewButton selected' : 'viewButton'">Daily</button>
+      <button (click)="showWeekly()" [className]="dateSelected.weeklySelected ? 'viewButton selected' : 'viewButton'">Weekly</button>
+      <div class="datePicker">
+        <ejs-datepicker id='datepicker' placeholder='Select a date' format='dd-MM-yyyy' [value]='dateValue' (renderDayCell)='onRenderCell($event)' (change)="changeDate($event)"></ejs-datepicker>
+      </div>
+      <div class="datePicker">
+        <select value="jobFilter" (change)="changeJobFilter($event)">
+          <option value="all">View All</option>
+          <option value="New">View New</option>
+          <option value="Assigned">View Out</option>
+          <option value="Complete">View Done</option>
+          <option disabled value="----------"></option>
+          <option value="U">Route U</option>
+          <option value="SDwn">Route SDwn</option>
+          <option value="Col">Route Col</option>
+          <option value="Pen">Route Pen</option>
+          <option value="Bal">Route Bal</option>
+          <option value="Mag">Route Mag</option>
+          <option value="Oma">Route Oma</option>
+          <option value="Car">Route Car</option>
+          <option value="Der">Route Der</option>
+          <option value="SBef">Route SBef</option>
+          <option value="Dwn-Arm">Route Dwn-Arm</option>
+          <option value="N-EBef">Route N-EBef</option>
+          <option value="Ant">Route Ant</option>
+        </select>
+      </div>
+    </div>
+    {{dateSelected.currentDate}}
+    <div class="searchDiv">
+      <app-search></app-search>
+    </div>
+  </div>
+</div>
+<!-- loop through the daily jobs displaying data in full -->
+<div *ngIf="dateSelected.dailySelected" class="cardContainer">
+  <div *ngFor="let job of jobsToday" class="card">
+    <div class="container">
+      <div class="jobAddress">
+        <div class="jobTitleContainer">
+          <div class="jobTitleRoute">{{job.Route}}</div>
+          <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+          <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+          <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+          <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+        </div>
+        <h3>{{job.JobType}} - {{job.JobStrDate}}</h3>
+        <p>{{job.Address1}}</p>
+        <p *ngIf="job.Address2">{{job.Address2}}</p>
+        <p>{{job.City}}</p>
+        <p>{{job.Postcode}}</p>
+      </div>
+      <button class="detailBtn" (click)="showMapDiv(job)"><i class="fa fa-map"></i> Open Map</button>
+      <div class="jobDetails">
+        <p style="padding: 3px"></p>
+        <h3>Details</h3>
+      <div *ngFor="let deets of job.Details">
+        <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+      </div>
+      <p style="padding: 3px"></p>
+      </div>
+
+      <p class="jobTitle sub">Employees</p>
+      <div class="empBox">
+        <p *ngFor="let emp of job.JobEmployees" style="font-size: small; margin: 1px;">
+          {{emp.firstName}} {{emp.lastName}}<br>
+        </p>
+      </div>
+      <button *ngIf="isAdmin" class="detailBtn add" (click)="openEmployeePopup(job)"><i class="fa fa-plus"></i> Add Employees</button>
+      <p style="padding: 2px; margin: 0"></p>      
+      <p class="jobTitle sub">Notes</p>
+      <div class="notesBox">
+        <p *ngFor="let notes of job.Notes" style="font-size: small; margin: 1px; white-space: normal;">
+          <u style="text-decoration: underline; font-weight: bold;">{{notes.name}} ({{notes.dateTime}})</u>
+          <br>{{notes.note}}
+        </p>
+      </div>
+      <button class="detailBtn add" (click)="openNotesPopup(job)"><i class="fa fa-plus"></i> Add Note</button>
+      <br>
+      <button class="detailBtn add" (click)="markAsComplete(job)"><i class="fa fa-check"></i> Job Complete</button>
+      <br>
+      <button *ngIf="isAdmin" class="detailBtn addEdit" (click)="openDatePopup(job)"><i class="fa fa-calendar"></i> Change date</button>
+      <button *ngIf="isAdmin" class="detailBtn edit" (click)="openEditJobPopup(job)"><i class="fa fa-edit"></i></button>
+    </div>
+  </div>
+</div>
+<!-- Loop though all the weekly jobs and display minimal data with the option to expand full data in a modal -->
+<div *ngIf="dateSelected.weeklySelected" class="cardContainer">
+  <div class="row">
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="M">Monday</abbr>
+        </li>
+      </ul>
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsMonday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="T">Tuesday</abbr>
+        </li>
+      </ul>
+    
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsTuesday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="W">Wednesday</abbr>
+        </li>
+      </ul>
+    
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsWednesday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="Th">Thursday</abbr>
+        </li>
+      </ul>
+    
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsThursday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="F">Friday</abbr>
+        </li>
+      </ul>
+    
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsFriday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+
+    <div class="column">
+      <ul class="weekdays">
+        <li>
+          <abbr title="S">Saturday</abbr>
+        </li>
+      </ul>
+    
+      <ul class="day-grid"> 
+        <div *ngFor="let job of jobsSaturday" class="dayCard">
+          <div class="dayContainer">
+            <div class="jobTitleContainer">
+              <div class="jobTitleRoute">{{job.Route}}</div>
+              <div _ngcontent-c3="" class="jobTitleId">{{job.JobId}}</div>
+              <div *ngIf="job.Status == 'New'" class="jobTitleStatus">New <i class="fa fa-circle red"></i></div>
+              <div *ngIf="job.Status == 'Assigned'" class="jobTitleStatus">Out <i class="fa fa-circle orange"></i></div>
+              <div *ngIf="job.Status == 'Complete'" class="jobTitleStatus">Done <i class="fa fa-circle green"></i></div>
+            </div>
+            <div class="jobAddress">
+              <p>{{job.JobType}} - {{job.JobStrDate}}</p>
+              <p>{{job.CustomerName}}</p>
+              <p>{{job.Address1}}, {{job.Postcode}}</p>
+              <hr>
+            <div *ngFor="let deets of job.Details">
+              <p>{{deets.qtdy}} x {{deets.name}}{{deets.qtdy > 1 ? 's' : ''}}</p>
+            </div>
+          </div>
+            <button class="detailBtn add" (click)="openJobDetailsPopup(job)"><i class="fa fa-eye"></i> View</button>
+          </div>
+        </div>
+      </ul>
+    </div>
+
+  </div>
+</div>
+<app-loading></app-loading>
+<app-map></app-map>

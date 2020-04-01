@@ -1,0 +1,48 @@
+<ngx-smart-modal #newEmpModal [identifier]="'newEmpModal'" (onClose)="onClose()"
+  [dismissable]="false">
+  <div style="margin-top: 20px">
+    <div class="addEmpContainer">
+      <div class="">
+        <p class="jobTitle">Add Employee</p>
+      </div>
+
+      <div>
+         <p class="errorClass">{{addErrMsg}}</p>
+        <table autocomplete="false" class="addJobTable">
+          <tr>
+            <td>First Name:</td>
+            <td><input [(ngModel)]="firstName" type="text" placeholder="First name"></td>
+          </tr>
+          <tr>
+            <td>Last Name:</td>
+            <td><input [(ngModel)]="lastName" type="text" placeholder="Last name"></td>
+          </tr>
+          <tr>
+            <td>Mobile #:</td>
+            <td><input [(ngModel)]="mobileNum" type="tel" placeholder="Mobile number"></td>
+          </tr>
+          <tr>
+            <td>User Type:</td>
+            <td>
+              <select class="selectEmpType" [(ngModel)]="userType">
+                <option *ngFor="let type of empType" [value]="type">{{type}}</option>
+              </select>
+          </td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td><input [(ngModel)]="emailAddy" type="email" name="newEmail" autocomplete="noFill" placeholder="Email Address"></td>
+          </tr>
+          <tr>
+            <td>Password</td>
+            <td><input [(ngModel)]="password" type="password" name="newPassword" autocomplete="new-password" placeholder="Password"></td>
+          </tr>
+        </table>
+        <div>
+          <button class="saveBtn" (click)="onSave()">Save Employee</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-loading></app-loading>
+</ngx-smart-modal>

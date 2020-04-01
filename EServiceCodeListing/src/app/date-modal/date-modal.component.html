@@ -1,0 +1,9 @@
+<ngx-smart-modal #dateModal [identifier]="'dateModal'" (onClose)="onClose()" (onOpen)="onOpen()"
+    [dismissable]="false">
+<div style="margin-top: 20px">
+<p class="jobTitle">{{jobTitle}}</p>
+    <h4 class="noteHeader">Change date:</h4>
+    <ejs-datepicker id='datepicker' placeholder='Select a date' format='dd-MM-yyyy' [min]='minDate' [value]='dateToAdd' (renderDayCell)='onRenderCell($event)' (change)="changeDate($event)"></ejs-datepicker>
+</div>
+<button class="saveBtn" (click)="onSave()">Save Changes</button>
+</ngx-smart-modal>

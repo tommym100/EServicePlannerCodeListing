@@ -1,0 +1,10 @@
+<input [(ngModel)]="searchTerm" (keyup)="triggerSearch($event.target.value)" class="searchJobs"
+  placeholder="Begin typing to search...">
+
+<ul *ngIf="results" class="ulStyle">
+  <li class="liStyle" *ngFor="let result of results">
+    <div class="ulDiv" (click)="openJob(result)">
+      {{result.JobId}} - {{result.Address1}} ({{result.JobStrDate}})
+    </div>
+  </li>
+</ul>

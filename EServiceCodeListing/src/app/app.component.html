@@ -1,0 +1,85 @@
+<app-addJob-modal></app-addJob-modal>
+
+<div class="main-nav" *ngIf="isAuthenticated">
+  <div class="logo-container">
+    <div class="menu-button btn secondary" (click)="toggleMenu()">
+      <div class="fa fa-bars"></div>
+    </div>
+    <div class="logo">
+      <img src="../assets/DJES-Logo.png" alt="Environmental Services" />
+    </div>
+  </div>
+      <h1>
+        {{title}}
+      </h1>
+
+  <div class="user-menu" appClickOutside (clickOutside)="showUserMenu = false">
+    <div class="user-dropdown">
+      <div class="label" (click)="showUserMenu = !showUserMenu">
+        {{user}}
+        <div class="fa fa-chevron-down icon"></div>
+      </div>
+
+      <div class="menu" [class.open]="showUserMenu">
+        <div class="caret"></div>
+        <div class="link" (click)="logout()">
+          <div class="icon">
+            <div class="fa fa-power-off"></div>
+          </div>
+          <div class="label">
+            Logout
+          </div>
+        </div>
+        <div class="divider"></div>
+      </div>
+    </div>
+    <div class="avatar" (click)="showUserMenu = !showUserMenu">
+    </div>
+  </div>
+</div>
+
+<div class="page-container" [class.padding]="showNav" [class.hasMenu]="isAuthenticated"
+  [class.menuOpen]="menuOpen">
+  <div class="link-menu" *ngIf="isAuthenticated" [class.open]="menuOpen">
+    <div class="links">
+      <div class="link" popperTrigger="hover" [popperPositionFixed]="true" popperPlacement="right"
+        [popperDisabled]="menuOpen" popperApplyClass="tf-tooltip" popper="E-Planner" routerLink="/home"
+        routerLinkActive="active">
+        <div class="icon">
+          <div class="fa fa-tachometer"></div>
+        </div>
+        <div class="label">E-Planner</div>
+      </div>
+      <div class="link" popperTrigger="hover" [popperPositionFixed]="true" popperPlacement="right"
+        [popperDisabled]="menuOpen" popperApplyClass="tf-tooltip" popper="Employees" routerLink="/employees"
+        routerLinkActive="active">
+        <div class="icon">
+          <div class="fa fa-user"></div>
+        </div>
+        <div class="label">Employees</div>
+      </div>
+      <div *ngIf="isAdmin" class="link" popperTrigger="hover" [popperPositionFixed]="true" popperPlacement="right"
+        [popperDisabled]="menuOpen" popperApplyClass="tf-tooltip" popper="Add Job" (click)="addJob()">
+        <div class="icon">
+          <div class="fa fa-plus"></div>
+        </div>
+        <div class="label">Add Job</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="link" popperTrigger="hover" [popperPositionFixed]="true" popperPlacement="right"
+        [popperDisabled]="menuOpen" popperApplyClass="tf-tooltip" popper="Show Menu" (click)="toggleMenu()">
+        <div style="color:black" class="icon">
+          <div class="fa fa-bars"></div>
+        </div>
+        <div class="label" style="color:black">Hide Menu</div>
+      </div>
+    </div>
+  </div>
+  <div class="menu-shadow" (click)="menuOpen = false"></div>
+  <router-outlet></router-outlet>
+</div>
+
+<notifier-container></notifier-container>
+<app-loading></app-loading>

@@ -1,0 +1,28 @@
+<div class="page-bg"></div>
+<div class="login-form">
+  <div class="logo">
+    <img src="/assets/DJES-Logo.png" />
+  </div>
+  <div class="login-wrap">
+    <ng-container>
+      <form [formGroup]="loginForm" novalidate (ngSubmit)="login()" [ngClass]="{'open': true}">
+        <div class="form">
+          <div class="title">Please Login</div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="text" formControlName="username" [ngClass]="displayFieldCss('loginForm', 'username')" name="username" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" formControlName="password" [ngClass]="displayFieldCss('loginForm', 'password')" name="password" autocomplete="off" />
+          </div>
+          <div class="actions">
+            <button class="btn">Login</button>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </div>
+</div>
+
+<app-loading [showNav]="showNav"></app-loading>

@@ -1,0 +1,45 @@
+@import "../../styles";
+
+:host {
+
+  th,
+  td {
+    width: 17%;
+    white-space: normal;
+    vertical-align: top;
+  }
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  th {
+    background-color: darkgray;
+  }
+  
+  td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+  .employeeTable {
+    text-align: left;
+  }
+
+  .addNewEmpBtn {
+    text-align: center;
+  }
+
+  .addNewEmpBtn button {
+    margin: 25px;
+    width: 200px;
+    height: 35px;
+  }
+}

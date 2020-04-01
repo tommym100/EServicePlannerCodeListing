@@ -1,0 +1,10 @@
+<ngx-smart-modal #employeeModal [identifier]="'employeeModal'" (onClose)="onClose()" (onOpen)="onOpen()"
+    [dismissable]="false">
+<div style="margin-top: 20px">
+<p class="jobTitle">{{jobTitle}}</p>
+<dual-list [source]="avalibleEmployees" [(destination)]="addedEmployees" [filter]="true" [sort]="true"
+    [display]="empName" [key]="'id'" height="300px">
+</dual-list>
+</div>
+<button class="saveBtn" (click)="onSave()">Save Changes</button>
+</ngx-smart-modal>

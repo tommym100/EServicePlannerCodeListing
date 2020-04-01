@@ -1,0 +1,8 @@
+
+<ngx-smart-modal #mapModal [identifier]="'mapModal'" (onClose)="onClose()" (onOpen)="onOpen()">
+<div style="margin-top: 20px">
+<p class="jobTitle">{{jobTitle}}</p>
+    <div #gmap style="width:100%;height:400px"></div>
+</div>
+<button class="saveBtn" (click)="getDirections()">Get Directions</button>
+</ngx-smart-modal>

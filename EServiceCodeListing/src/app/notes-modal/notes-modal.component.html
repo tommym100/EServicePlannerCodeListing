@@ -1,0 +1,9 @@
+<ngx-smart-modal #notesModal [identifier]="'notesModal'" (onClose)="onClose()" (onOpen)="onOpen()"
+    [dismissable]="false">
+<div style="margin-top: 20px">
+<p class="jobTitle">{{jobTitle}}</p>
+    <h4 class="noteHeader">Add note:</h4>
+    <textarea [(ngModel)]="noteToAdd" class="noteArea"></textarea>
+</div>
+<button class="saveBtn" (click)="onSave()">Save Changes</button>
+</ngx-smart-modal>

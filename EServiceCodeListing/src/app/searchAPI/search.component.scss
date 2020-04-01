@@ -1,0 +1,35 @@
+  .searchJobs {
+      width: 300px;
+      float: right;
+      margin-left: 30px;
+  }
+
+  .ulStyle {
+    position: absolute;
+    width: 303px;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    top: 32px;
+    margin-left: 31px;
+  }
+
+  .liStyle:nth-child(even) {
+    border-top: groove;
+    border-bottom: groove;
+
+  }
+
+  .ulDiv {
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: small;
+    font-weight: bold;
+  }
+
+  .liStyle {
+    text-align: left;
+    height: 25px;
+    list-style-type: none;
+  }
