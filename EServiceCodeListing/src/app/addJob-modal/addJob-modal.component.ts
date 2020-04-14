@@ -62,7 +62,8 @@ export class AddJobModalComponent implements OnInit {
     this.custName = "";
     this.houseNum = new Number();
     this.postCode = "";
-    this.custAddObj = { Address1: "", Address2: "", City: "", Postcode: "", lat: "", lng: "" }
+    this.custAddObj = { Address1: "", Address2: "", City: "", Postcode: "", lat: "", lng: "" };
+    this.selectedRoute = "Select Route";
     this.units = [];
     this.unitType = "Select unit type";
     this.unitQtdy = 0;
@@ -291,33 +292,42 @@ export class AddJobModalComponent implements OnInit {
             });
         };
 
-        //if there is a finish date greater than 30 days, make a Service job for that date
-        if((this.jobType == "Delivery" && this.endDate) && (this.dayDiff(this.startDate, this.endDate) > 35)){
-          //build the finish date
+        //if there is a finish date greater than 7 days, make service jobs until the end date 
+        const differenceInDays = this.dayDiff(this.startDate, this.endDate);
+        if((this.jobType == "Delivery" && this.endDate) && (differenceInDays > 9)){
+          debugger;
+          const serviceWeeks = Math.round(differenceInDays / 7);
           let serviceDate = new Date(this.startDate);
-          serviceDate.setDate(this.startDate.getDate() + 30);
-          //if sunday then move to monday
-          if(serviceDate.getDay() == 0){ 
-            serviceDate.setDate(serviceDate.getDate() + 1);
+          for(let i = 0; i < serviceWeeks; i++){
+            //build the finish date
+            serviceDate.setDate(serviceDate.getDate() + 7);
+            //of the finish date and within 3 days of the service date skip this job as it will be too close to collection
+            if(this.dayDiff(serviceDate, this.endDate) < 3){
+              break;
+            }
+            //if sunday then move to monday
+            if(serviceDate.getDay() == 0){ 
+              serviceDate.setDate(serviceDate.getDate() + 1);
+            }
+            jobCountId++;
+            let jobId = "Job" + jobCountId;
+              jobsToBeAdded.push({
+                JobId: jobId,
+                JobDate: serviceDate.toISOString().split("T")[0],
+                JobType: "Service",
+                CustomerName: this.custName,
+                Address1: this.custAddObj.Address1,
+                Address2: this.custAddObj.Address2,
+                City: this.custAddObj.City,
+                Postcode: this.custAddObj.Postcode,
+                lat: this.custAddObj.lat,
+                lng: this.custAddObj.lng,
+                Route: "U",
+                Details: this.units,
+                Notes: [],
+                Status: "New"
+              });
           }
-          jobCountId++;
-          let jobId = "Job" + jobCountId;
-            jobsToBeAdded.push({
-              JobId: jobId,
-              JobDate: serviceDate.toISOString().split("T")[0],
-              JobType: "Service",
-              CustomerName: this.custName,
-              Address1: this.custAddObj.Address1,
-              Address2: this.custAddObj.Address2,
-              City: this.custAddObj.City,
-              Postcode: this.custAddObj.Postcode,
-              lat: this.custAddObj.lat,
-              lng: this.custAddObj.lng,
-              Route: "U",
-              Details: this.units,
-              Notes: [],
-              Status: "New"
-            });
         };
 
         //updates the job count for the ID counter
